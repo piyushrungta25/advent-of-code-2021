@@ -1,0 +1,5 @@
+Advent of code 2021
+
+For each day, compile and run the program using command
+
+    nim c -r main.nim
