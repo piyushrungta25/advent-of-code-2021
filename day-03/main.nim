@@ -1,14 +1,10 @@
 import std/strutils
 import std/math
-import std/parseutils
 import std/sugar
 import std/sequtils
 
-proc parseInput(): seq[string] =
-    return open("input").readAll.strip.splitLines
-
-proc getCounts(numbers: seq[string]): array[0..11, int] =
-    var counts: array['0'..'1', array[0..11, int]]
+proc getCounts(numbers: seq[string]): array[12, int] =
+    var counts: array['0'..'1', array[12, int]]
     for num in numbers:
         for i, c in num:
             inc(counts[c][i])
@@ -44,16 +40,10 @@ proc part2(numbers: seq[string]): int =
         if co2.len != 1:
             co2 = co2.filterAtPos(1 - co2.getCounts[i], i)
 
-    var oxy_rating, co2_rating: int
-
-    assert parseBin(oxy[0], oxy_rating) > 0
-    assert parseBin(co2[0], co2_rating) > 0
-
-    return oxy_rating * co2_rating
+    return oxy[0].parseBinInt * co2[0].parseBinInt
 
 
 when isMainModule:
-    var input = parseInput()
+    var input = "./input".lines.toSeq
     echo part1(input)
     echo part2(input)
-
