@@ -14,8 +14,6 @@ proc parseInput(): seq[Instruction] =
     let f = open("input")
     defer: f.close()
 
-    result = newSeq[Instruction]()
-
     for line in f.lines:
         let direction = case line.split(' ')[0]:
             of "forward":
@@ -27,13 +25,13 @@ proc parseInput(): seq[Instruction] =
             else:
                 raise newException(FieldError, "bad input")
         
-        let value = parseInt(line.split(' ')[1])
+        let value = parseInt(line.split[1])
 
         result.add(Instruction(direction: direction, value: value))
     
 
 
-proc part1(instructions: var seq[Instruction]): int = 
+proc part1(instructions: seq[Instruction]): int = 
     var pos, depth = 0
     for insturction in instructions:
         case insturction.direction:
@@ -46,14 +44,13 @@ proc part1(instructions: var seq[Instruction]): int =
     
     result = pos*depth
 
-proc part2(instructions: var seq[Instruction]): int = 
+proc part2(instructions: seq[Instruction]): int = 
     var pos, depth, aim = 0
     for insturction in instructions:
         case insturction.direction:
             of forward:
                 pos += insturction.value
-                if aim != 0:
-                    depth += (insturction.value * aim)
+                depth += (insturction.value * aim)
             of down:
                 aim += insturction.value
             of up:
