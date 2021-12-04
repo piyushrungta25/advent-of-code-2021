@@ -4,17 +4,13 @@ import std/re
 import std/sugar
 import std/math
 
+const N = 5
 type
-    Board = array[5, array[5, int]]
+    Board = seq[seq[int]]
     Inputs = seq[int]
     Game = object
         boards: seq[Board]
         inputs: Inputs
-
-proc toBoard(ints: seq[int]): Board =
-    for i, row in result:
-        for j, num in row:
-            result[i][j] = ints[i*5+j]
 
 
 proc parseInput(): Game =
@@ -26,7 +22,7 @@ proc parseInput(): Game =
 
     let boards: seq[Board] = collect:
         for s in f.readAll.strip.split("\n\n"):
-            collect(for i in s.strip.split(re"\s+"): parseInt(i)).toBoard
+            s.strip.split(re"\s+").map(parseInt).distribute(N)
 
     return Game(boards: boards, inputs: inputs)
 
@@ -34,6 +30,7 @@ proc parseInput(): Game =
 
 proc sumOfUnmarked(board: Board): int =
     return board.mapIt(it.filterIt(it != -1).sum).sum
+
 
 proc markIfPresent(board: var Board, num: int) =
     for i, row in board:
