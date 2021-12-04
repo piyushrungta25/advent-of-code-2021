@@ -17,7 +17,7 @@ proc parseInput(): Game =
     let f = open("./input")
     defer: f.close
 
-    let inputs = f.readLine.split(",").mapIt(parseInt(it))
+    let inputs = f.readLine.split(",").map(parseInt)
     discard f.readline() # empty line
 
     let boards: seq[Board] = collect:
