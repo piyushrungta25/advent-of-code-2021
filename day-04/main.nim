@@ -3,6 +3,7 @@ import std/strutils
 import std/re
 import std/sugar
 import std/math
+import std/sets
 
 const N = 5
 type
@@ -27,53 +28,39 @@ proc parseInput(): Game =
     return Game(boards: boards, inputs: inputs)
 
 
-
 proc sumOfUnmarked(board: Board): int =
     return board.mapIt(it.filterIt(it != -1).sum).sum
 
 
-proc markIfPresent(board: var Board, num: int) =
+proc bingo(board: Board): bool =
+    for row in board:
+        if row.sum == -5: return true
+
+    for i in 0..4:
+        if board.mapIt(it[i]).sum == -5: return true
+
+
+proc markIfPresent(board: var Board, num: int): bool =
     for i, row in board:
         for j, n in row:
             if n == num:
                 board[i][j] = -1
 
-proc bingo(board: Board): bool =
-    for row in board:
-        if row.sum == -5:
-            return true
-
-    for i in 0..4:
-        if board.mapIt(it[i]).sum == -5:
-            return true
+    return board.bingo
 
 
-proc part1(): int =
-    var game = parseInput()
-    for i in game.inputs:
-        for board in game.boards.mitems:
-            board.markIfPresent(i)
-            if board.bingo:
-                return i*board.sumOfUnmarked
+proc scores(game: var Game): seq[int] =
+    var not_bingo = toHashSet toSeq(0..<game.boards.len)
 
-
-proc part2(): int =
-    var game = parseInput()
-    var boards = game.boards
-
-    for i, num in game.inputs:
-        for board in boards.mitems: board.markIfPresent(num)
-
-        boards = boards.filterIt(not it.bingo)
-        if boards.len == 1: # assumes that there will be a single board which will win last
-            var mi = i
-            while not boards[0].bingo: # find the input which makes completes this board's bingo
-                mi += 1
-                boards[0].markIfPresent(game.inputs[mi])
-
-            return boards[0].sumOfUnmarked * game.inputs[mi]
+    for num in game.inputs:
+        for i in not_bingo.toSeq.toSeq:
+            if game.boards[i].markIfPresent(num):
+                not_bingo.excl i
+                result.add(num*game.boards[i].sumOfUnmarked)
 
 
 when isMainModule:
-    echo part1()
-    echo part2()
+    var game = parseInput()
+    var all_scores = game.scores
+    echo "part1: ", all_scores[0]
+    echo "part2: ", all_scores[^1]
