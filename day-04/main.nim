@@ -33,7 +33,7 @@ proc parseInput(): Game =
 
 
 proc sumOfUnmarked(board: Board): int =
-    return collect(for row in board: row.filterIt(it != -1).sum).sum
+    return board.mapIt(it.filterIt(it != -1).sum).sum
 
 proc markIfPresent(board: var Board, num: int) =
     for i, row in board:
