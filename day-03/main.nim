@@ -1,8 +1,8 @@
-# import std/strutils
-# import std/math
-# import std/sugar
-# import std/sequtils
-# import std/tables
+import std/strutils
+import std/math
+import std/sugar
+import std/sequtils
+import std/tables
 
 proc getCounts(numbers: seq[string]): array[12, int] =
     for i in 0..11:
