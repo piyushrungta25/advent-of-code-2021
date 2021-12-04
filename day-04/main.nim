@@ -16,32 +16,6 @@ proc toBoard(ints: seq[int]): Board =
         for j, num in row:
             result[i][j] = ints[i*5+j]
 
-proc sumOfUnmarked(board: Board): int =
-    for row in board:
-        for num in row:
-            if num >= 0:
-                result += num
-
-proc markIfPresent(board: var Board, num: int) =
-    for i, row in board:
-        for j, n in row:
-            if n == num:
-                board[i][j] = -1
-
-proc bingo(board: Board): bool =
-    for row in board:
-        if row.sum == -5:
-            return true
-
-    for i in 0..4:
-        var sum: int
-        for row in board:
-            sum += row[i]
-        if sum == -5:
-            return true
-
-    return false
-
 
 proc parseInput(): Game =
     let f = open("./input")
@@ -56,6 +30,27 @@ proc parseInput(): Game =
 
     return Game(boards: boards, inputs: inputs)
 
+
+
+proc sumOfUnmarked(board: Board): int =
+    return collect(for row in board: row.filterIt(it != -1).sum).sum
+
+proc markIfPresent(board: var Board, num: int) =
+    for i, row in board:
+        for j, n in row:
+            if n == num:
+                board[i][j] = -1
+
+proc bingo(board: Board): bool =
+    for row in board:
+        if row.sum == -5:
+            return true
+
+    for i in 0..4:
+        if board.mapIt(it[i]).sum == -5:
+            return true
+
+
 proc part1(): int =
     var game = parseInput()
     for i in game.inputs:
@@ -67,16 +62,15 @@ proc part1(): int =
 
 proc part2(): int =
     var game = parseInput()
-
     var boards = game.boards
 
     for i, num in game.inputs:
         for board in boards.mitems: board.markIfPresent(num)
 
         boards = boards.filterIt(not it.bingo)
-        if boards.len == 1:
+        if boards.len == 1: # assumes that there will be a single board which will win last
             var mi = i
-            while not boards[0].bingo:
+            while not boards[0].bingo: # find the input which makes completes this board's bingo
                 mi += 1
                 boards[0].markIfPresent(game.inputs[mi])
 
@@ -84,5 +78,5 @@ proc part2(): int =
 
 
 when isMainModule:
-    echo part1() == 29440
-    echo part2() == 13884
+    echo part1()
+    echo part2()
