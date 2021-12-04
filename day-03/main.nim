@@ -2,16 +2,12 @@ import std/strutils
 import std/math
 import std/sugar
 import std/sequtils
+import std/tables
 
 proc getCounts(numbers: seq[string]): array[12, int] =
-    var counts: array['0'..'1', array[12, int]]
-    for num in numbers:
-        for i, c in num:
-            inc(counts[c][i])
-
     for i in 0..11:
-        if counts['1'][i] >= counts['0'][i]:
-            result[i] = 1
+        let counts = toCountTable(collect(for row in numbers: row[i]))
+        result[i] = int(counts['1'] >= counts['0'])
 
 
 proc part1(numbers: seq[string]): int =
