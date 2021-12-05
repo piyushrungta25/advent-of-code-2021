@@ -3,24 +3,15 @@ import strscans, sugar, math, sequtils
 type
     Point = tuple[x, y: int]
     Line = tuple[p1, p2: Point]
-    Grid = seq[seq[int]]
+    Grid = array[1024, array[1024, int]]
 
-proc newGrid(x, y: int): Grid = newSeqWith(x+1, newSeq[int](y+1))
-
-proc parseInput(): (Grid, seq[Line]) =
+proc parseInput(): seq[Line] =
     const INPUT_PATTERN = "$i,$i -> $i,$i"
-    var max_x, max_y = low(int)
 
-    let lines: seq[Line] = collect:
+    return collect:
         for line in "input".lines:
             var (_, y1, x1, y2, x2) = line.scanTuple(INPUT_PATTERN)
-            max_x = max(max(x1, x2), max_x)
-            max_y = max(max(y1, y2), max_y)
             ((x1, y1), (x2, y2))
-
-    let grid: Grid = newGrid(max_x, max_y)
-
-    return (grid, lines)
 
 proc isDiagonal(line: Line): bool = not (line.p1.x == line.p2.x or line.p1.y == line.p2.y)
 proc norm(x: int): int = return if x == 0: 0 elif x > 0: 1 else: -1
@@ -54,6 +45,7 @@ proc part2(grid: var Grid, lines: seq[Line]): int =
     return grid.countIntersections()
 
 when isMainModule:
-    var (grid, lines) = parseInput()
+    var grid: Grid
+    var lines = parseInput()
     echo part1(grid, lines)
     echo part2(grid, lines)
