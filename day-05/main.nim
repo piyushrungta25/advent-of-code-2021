@@ -5,13 +5,11 @@ type
     Line = tuple[p1, p2: Point]
     Grid = array[1024, array[1024, int]]
 
-proc parseInput(): seq[Line] =
-    const INPUT_PATTERN = "$i,$i -> $i,$i"
+proc parseLine(line: string): Line =
+    discard line.scanf("$i,$i -> $i,$i", result.p1.y, result.p1.x, result.p2.y, result.p2.x)
 
-    return collect:
-        for line in "input".lines:
-            var (_, y1, x1, y2, x2) = line.scanTuple(INPUT_PATTERN)
-            ((x1, y1), (x2, y2))
+proc parseInput(): seq[Line] =
+    "input".lines.toSeq.mapIt(it.parseLine)
 
 proc isDiagonal(line: Line): bool = not (line.p1.x == line.p2.x or line.p1.y == line.p2.y)
 proc norm(x: int): int = return if x == 0: 0 elif x > 0: 1 else: -1
