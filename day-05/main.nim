@@ -1,4 +1,4 @@
-include ../base
+include ../imports
 
 type
     Point = tuple
