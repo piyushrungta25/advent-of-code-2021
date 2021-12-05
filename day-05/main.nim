@@ -1,4 +1,4 @@
-include ../imports
+import strscans, sugar, math, sequtils
 
 type
     Point = tuple[x, y: int]
@@ -23,37 +23,25 @@ proc parseInput(): (Grid, seq[Line]) =
 
     return (grid, lines)
 
-proc isHorizontal(line: Line): bool = line.p1.x == line.p2.x
-proc isVertical(line: Line): bool = line.p1.y == line.p2.y
-proc isDiagonal(line: Line): bool = not (line.isHorizontal or line.isVertical)
-proc norm(x: int): int = return if x > 0: 1 else: -1
+proc isDiagonal(line: Line): bool = not (line.p1.x == line.p2.x or line.p1.y == line.p2.y)
+proc norm(x: int): int = return if x == 0: 0 elif x > 0: 1 else: -1
 
-proc plotHorizontal(grid: var Grid, line: Line) =
-    let x = line.p1.x
-    for i in min(line.p1.y, line.p2.y)..max(line.p1.y, line.p2.y):
-        grid[x][i] += 1
-
-proc plotVertical(grid: var Grid, line: Line) =
-    let y = line.p1.y
-    for i in min(line.p1.x, line.p2.x)..max(line.p1.x, line.p2.x):
-        grid[i][y] += 1
-
-proc plotIfDiagonal(grid: var Grid, line: Line) =
-    if not line.isDiagonal: return
-
+proc plot(grid: var Grid, line: Line) =
     let slopeX = (line.p2.x - line.p1.x).norm
     let slopeY = (line.p2.y - line.p1.y).norm
 
     var (x, y) = line.p1
     grid[x][y] += 1
-    while x != line.p2.x and y != line.p2.y:
+    while x != line.p2.x or y != line.p2.y:
         x += slopeX
         y += slopeY
         grid[x][y] += 1
 
+proc plotIfDiagonal(grid: var Grid, line: Line) =
+    if line.isDiagonal: grid.plot(line)
+
 proc plotIfStraight(grid: var Grid, line: Line) =
-    if line.isHorizontal: grid.plotHorizontal(line)
-    elif line.isVertical: grid.plotVertical(line)
+    if not line.isDiagonal: grid.plot(line)
 
 proc countIntersections(grid: Grid): int =
     return grid.map(row => row.filterIt(it > 1).len).sum
