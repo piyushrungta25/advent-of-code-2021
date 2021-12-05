@@ -9,15 +9,14 @@ proc newGrid(x, y: int): Grid = newSeqWith(x+1, newSeq[int](y+1))
 
 proc parseInput(): (Grid, seq[Line]) =
     const INPUT_PATTERN = "$i,$i -> $i,$i"
-    var x1, y1, x2, y2: int
     var max_x, max_y = low(int)
 
     let lines: seq[Line] = collect:
         for line in "input".lines:
-            if scanf(line, INPUT_PATTERN, y1, x1, y2, x2):
-                max_x = max(max(x1, x2), max_x)
-                max_y = max(max(y1, y2), max_y)
-                ((x1, y1), (x2, y2))
+            var (_, y1, x1, y2, x2) = line.scanTuple(INPUT_PATTERN)
+            max_x = max(max(x1, x2), max_x)
+            max_y = max(max(y1, y2), max_y)
+            ((x1, y1), (x2, y2))
 
     let grid: Grid = newGrid(max_x, max_y)
 
