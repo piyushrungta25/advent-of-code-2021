@@ -1,12 +1,8 @@
 include ../imports
 
 type
-    Point = tuple
-        x, y: int
-
-    Line = tuple
-        p1, p2: Point
-
+    Point = tuple[x, y: int]
+    Line = tuple[p1, p2: Point]
     Grid = seq[seq[int]]
 
 proc newGrid(x, y: int): Grid = newSeqWith(x+1, newSeq[int](y+1))
@@ -27,24 +23,20 @@ proc parseInput(): (Grid, seq[Line]) =
 
     return (grid, lines)
 
-
 proc isHorizontal(line: Line): bool = line.p1.x == line.p2.x
 proc isVertical(line: Line): bool = line.p1.y == line.p2.y
 proc isDiagonal(line: Line): bool = not (line.isHorizontal or line.isVertical)
 proc norm(x: int): int = return if x > 0: 1 else: -1
-
 
 proc plotHorizontal(grid: var Grid, line: Line) =
     let x = line.p1.x
     for i in min(line.p1.y, line.p2.y)..max(line.p1.y, line.p2.y):
         grid[x][i] += 1
 
-
 proc plotVertical(grid: var Grid, line: Line) =
     let y = line.p1.y
     for i in min(line.p1.x, line.p2.x)..max(line.p1.x, line.p2.x):
         grid[i][y] += 1
-
 
 proc plotIfDiagonal(grid: var Grid, line: Line) =
     if not line.isDiagonal: return
@@ -59,25 +51,20 @@ proc plotIfDiagonal(grid: var Grid, line: Line) =
         y += slopeY
         grid[x][y] += 1
 
-
 proc plotIfStraight(grid: var Grid, line: Line) =
     if line.isHorizontal: grid.plotHorizontal(line)
     elif line.isVertical: grid.plotVertical(line)
 
-
 proc countIntersections(grid: Grid): int =
     return grid.map(row => row.filterIt(it > 1).len).sum
-
 
 proc part1(grid: var Grid, lines: seq[Line]): int =
     for line in lines: grid.plotIfStraight(line)
     return grid.countIntersections()
 
-
 proc part2(grid: var Grid, lines: seq[Line]): int =
     for line in lines: grid.plotIfDiagonal(line)
     return grid.countIntersections()
-
 
 when isMainModule:
     var (grid, lines) = parseInput()
