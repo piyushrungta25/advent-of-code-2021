@@ -5,3 +5,4 @@ import std/sequtils
 import std/sets
 import std/re
 import std/strutils
+import std/tables
