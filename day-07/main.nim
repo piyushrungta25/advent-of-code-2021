@@ -4,7 +4,7 @@ proc part1(positions: seq[int]): int =
     let costs = collect:
         for i in positions.min..positions.max:
             positions.mapIt(abs(i-it)).sum
-    
+
     return costs.min
 
 proc part2(positions: seq[int]): int =
