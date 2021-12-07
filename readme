@@ -3,3 +3,7 @@ Advent of code 2021
 For each day, compile and run the program using command
 
     nim c -r main.nim
+
+compile and run with release flag
+
+    nim c -d:release -r main.nim
