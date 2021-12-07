@@ -8,10 +8,9 @@ proc part1(positions: seq[int]): int =
     return costs.min
 
 proc part2(positions: seq[int]): int =
-    let best = (positions.sum/positions.len).floor.int
     let costs = collect:
         for i in positions.min..positions.max:
-            positions.map(x => (x-best).abs).map(x => x*(x+1)/2).sum.int
+            positions.map(x => (x-i).abs).map(x => x*(x+1)/2).sum.int
 
     return costs.min
 
