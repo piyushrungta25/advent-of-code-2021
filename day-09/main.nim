@@ -1,4 +1,4 @@
-include ../imports
+import std/[sequtils, sugar, heapqueue]
 
 type
     HeightMap = seq[seq[int]]
