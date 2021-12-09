@@ -65,5 +65,5 @@ proc part2(heightmap: var HeightMap, lowPoints: Points): int =
 when isMainModule:
     var heightmap = parseInput()
     let lowPoints = heightmap.getLowPoints
-    echo heightMap.part1(lowPoints) == 439
-    echo heightMap.part2(lowPoints) == 900900
+    echo heightMap.part1(lowPoints)
+    echo heightMap.part2(lowPoints)
