@@ -9,3 +9,6 @@ import std/tables
 import std/algorithm
 import std/strformat
 import std/heapqueue
+import std/hashes
+import system/iterators
+import std/options
