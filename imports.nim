@@ -1,3 +1,5 @@
+include prelude
+
 import std/strscans
 import std/sugar
 import std/math
