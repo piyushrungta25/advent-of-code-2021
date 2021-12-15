@@ -31,6 +31,7 @@ proc shortestPath(grid: Grid): int =
             if curMinPath.weight + grid[p] < weights.getOrDefault(p, high(int)):
                 weights[p] = curMinPath.weight + grid[p]
                 minPaths.push((p, weights[p]))
+                if p == END: return weights[END]
 
     return weights[END]
 
