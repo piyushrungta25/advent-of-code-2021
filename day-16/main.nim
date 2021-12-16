@@ -102,22 +102,14 @@ proc eval(packet: Packet): int =
         of Operator:
             let operands = packet.values.map(eval)
             case packet.typeID:
-                of 0:
-                    return operands.sum
-                of 1:
-                    return operands.foldl(a * b)
-                of 2:
-                    return operands.min
-                of 3:
-                    return operands.max
-                of 5:
-                    return ord(operands[0] > operands[1])
-                of 6:
-                    return ord(operands[0] < operands[1])
-                of 7:
-                    return ord(operands[0] == operands[1])
-                else:
-                    raise newException(ValueError, "shouldn't happen")
+                of 0: return operands.sum
+                of 1: return operands.foldl(a * b)
+                of 2: return operands.min
+                of 3: return operands.max
+                of 5: return ord(operands[0] > operands[1])
+                of 6: return ord(operands[0] < operands[1])
+                of 7: return ord(operands[0] == operands[1])
+                else: raise newException(ValueError, "shouldn't happen")
 
 
 when isMainModule:
