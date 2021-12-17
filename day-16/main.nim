@@ -41,13 +41,13 @@ proc getBitStream(binaryString: string): BinaryStream =
 
 
 proc parseLiteral(stream: BinaryStream): Packet =
-    var valueStr: string
+    var
+        valueStr: string
+        hasMore = true
 
-    while true:
-        var hasMore = stream(1) == "1"
+    while hasMore:
+        hasMore = stream(1) == "1"
         valueStr &= stream(4)
-        if not hasMore:
-            break
 
     return Packet(packetType: Literal, value: valueStr.parseBinInt)
 
