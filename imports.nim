@@ -15,3 +15,4 @@ import std/hashes
 import system/iterators
 import std/options
 import std/json
+import std/unittest
