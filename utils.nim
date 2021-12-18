@@ -1,4 +1,6 @@
 include imports
 
-proc pecho[T](a: T) =
-    echo pretty(%* a)
+proc pecho[T](args: varargs[T]) =
+    for arg in args:
+        echo pretty(%* arg)
+        echo "------"
